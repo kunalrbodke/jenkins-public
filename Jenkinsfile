@@ -30,7 +30,7 @@ pipeline {
                 script{
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    dockerImage.push "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+                    dockerImage.push ("${IMAGE_REPO_NAME}:${IMAGE_TAG}")
                     // dockerImage.push("IMAGE_TAG")
                     }
                 }
