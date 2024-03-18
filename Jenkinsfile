@@ -33,7 +33,7 @@ pipeline {
 
                     // app.push("${env.BUILD_NUMBER}")
                     // app.push("IMAGE_TAG")
-                    }
+                    // }
                 }
             }
         }
