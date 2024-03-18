@@ -30,7 +30,7 @@ pipeline {
                 script{
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    dockerImage.push ("${env.BUILD_NUMBER}")
+                    dockerImage.push ("${env.IMAGE_TAG}")
                     dockerImage.push("latest")
                     }
                 }
