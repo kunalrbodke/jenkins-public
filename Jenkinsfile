@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCOUNT_ID="AWS_ACCOUNT_ID"
+        AWS_ACCOUNT_ID="922710632928"
         IMAGE_REPO_NAME="sandbox-web"
         AWS_DEFAULT_REGION="ap-south-1"
         IMAGE_TAG="v1.0.1"
