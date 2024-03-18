@@ -28,7 +28,7 @@ pipeline {
         stage('Deploying to ECR') {
             steps {
                 script{
-                    docker.withRegistry('https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}', 'ecr:${AWS_DEFAULT_REGION}:aws-ecr-access') {
+                    docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
                     app.push("${env.BUILD_NUMBER}")
                     app.push("IMAGE_TAG")
                     }
