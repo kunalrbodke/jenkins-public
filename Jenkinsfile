@@ -28,12 +28,11 @@ pipeline {
         stage('Deploying to ECR') {
             steps {
                 script{
-                    sh 'docker images'
-                    // docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
+                    docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    // app.push("${env.BUILD_NUMBER}")
-                    // app.push("IMAGE_TAG")
-                    // }
+                    dockerImage.push("${env.BUILD_NUMBER}")
+                    dockerImage.push("IMAGE_TAG")
+                    }
                 }
             }
         }
