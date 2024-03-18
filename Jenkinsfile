@@ -4,7 +4,7 @@ pipeline {
         AWS_ACCOUNT_ID="922710632928"
         IMAGE_REPO_NAME="sandbox-web"
         AWS_DEFAULT_REGION="ap-south-1"
-        IMAGE_TAG="v1.0.4"
+        IMAGE_TAG="v1.0.5"
         REPOSITORY_URI="922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web"
     }
     options {
