@@ -18,8 +18,8 @@ pipeline {
         }
         stage('Initialize Builder') {
             steps {
-                sh 'docker buildx create --name jenkins-builder'
-                sh 'docker buildx use jenkins-builder'
+                sh 'docker buildx create --use --name jenkins-builder'
+                // sh 'docker buildx use jenkins-builder'
             }
         }
         stage('Creating Emulator for the Multi-Architecture') {
