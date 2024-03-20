@@ -30,15 +30,18 @@ pipeline {
         stage('Build Images for the Supported Architectures') {
             steps {
                 script {
-                    for arch in arm64 amd64  ; do
-                        docker buildx build \
-                            --platform $arch \
-                            --output "type=docker,push=false,name=local/ci-tools:latest-$arch"  .
-                    done
-                }
+                    for (arch in ['arm64', 'amd64']) {
+                        sh """
+                        docker buildx build \\
+                            --platform ${arch} \\
+                            --output "type=docker,push=false,name=local/ci-tools:latest-${arch}" \\
+                            .
+                        """
+                    }
+                }    
             }
         }
-        
+
         stage('Building Image') { 
             steps { 
                 script{
