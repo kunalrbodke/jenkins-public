@@ -13,6 +13,7 @@ pipeline {
             steps {
                 sh 'docker images'
             }
+        }
         stage('Clonning repository') { 
             steps { 
                 script{
@@ -26,11 +27,11 @@ pipeline {
         //         // sh 'docker buildx use jenkins-builder'
         //     }
         // }
-        stage('Creating Emulator for the Multi-Architecture') {
-            steps {
-                sh 'docker run --privileged --rm tonistiigi/binfmt --install arm64,arm'
-            }
-        }
+        // stage('Creating Emulator for the Multi-Architecture') {
+        //     steps {
+        //         sh 'docker run --privileged --rm tonistiigi/binfmt --install arm64,arm'
+        //     }
+        // }
         // stage('Build Images for the Supported Architectures') {
         //     steps {
         //         script {
@@ -53,32 +54,27 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Deploying to ECR') {
-            steps {
-                script{
-                    docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
+        // stage('Deploying to ECR') {
+        //     steps {
+        //         script{
+        //             docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
                     
-                    def image = docker.image "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+        //             def image = docker.image "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
 
-                    sh "docker buildx create --name multiarch"
+        //             sh "docker buildx create --name multiarch"
 
-                    sh """
+        //             sh """
 
-                    docker buildx build \
-                        --platform linux/amd64,linux/arm64 \
-                        -t ${image.imageName()} \
-                        --push .
-                    """
+        //             docker buildx build \
+        //                 --platform linux/amd64,linux/arm64 \
+        //                 -t ${image.imageName()} \
+        //                 --push .
+        //             """
 
-                    // dockerImage.push ("${env.IMAGE_TAG}")
-                    }
-                }
-            }
-        }
-        stage('Clean Docker Images') {
-            steps {
-                sh 'docker image prune -a -f'
-            }
-        }
+        //             // dockerImage.push ("${env.IMAGE_TAG}")
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
