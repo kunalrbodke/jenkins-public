@@ -9,7 +9,8 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-        stage('Preparing Setup for AMD64') {
+        // amd64
+        stage('Preparing Setup for AMD64 arch.') {
             agent {
                 docker {
                     image 'local/ci-tools:latest-amd64'
@@ -22,19 +23,50 @@ pipeline {
                 }
             }
         }
-        stage('Building AMD64') {
+        stage('Building AMD64 arch Image') {
             steps {
                 script{
                     dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}-amd64"
                 }
             }
         }
-        stage('Deploying to AWS-ECR') {
+        stage('Deploying AMD64 arch Image to ECR') {
             steps {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
                     dockerImage.push ("${env.IMAGE_TAG}-amd64")
+                    }
+                }
+            }
+        }
+        // arm64
+        stage('Preparing Setup for ARM64 arch.') {
+            agent {
+                docker {
+                    image 'local/ci-tools:latest-arm64'
+                    reuseNode true
+                }
+            }
+            steps {
+                script{
+                    checkout scm
+                }
+            }
+        }
+        stage('Building ARM64 arch Image') {
+            steps {
+                script{
+                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}-arm64"
+                }
+            }
+        }
+        stage('Deploying ARM64 arch Image to ECR') {
+            steps {
+                script {
+                    docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
+
+                    dockerImage.push ("${env.IMAGE_TAG}-arm64")
                     }
                 }
             }
