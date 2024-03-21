@@ -9,7 +9,7 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-         stage {
+        stage('docker images') {
             steps {
                 sh 'docker images'
             }
