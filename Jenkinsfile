@@ -16,6 +16,11 @@ pipeline {
                 }
             }
         }
+        stage {
+            steps {
+                sh 'which docker'
+            }
+        }
         // stage('Initialize Builder') {
         //     steps {
         //         sh 'docker buildx create --name jenkins-builder'
