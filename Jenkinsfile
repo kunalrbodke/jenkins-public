@@ -61,7 +61,7 @@ pipeline {
                     
                     def image = docker.image "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
 
-                    sh "docker buildx create --use --name multiarch"
+                    sh "docker buildx create --name multiarch"
 
                     sh """
 
