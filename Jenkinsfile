@@ -9,16 +9,11 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-         stage('Clonning repository') { 
+        stage('Clonning repository') { 
             steps { 
                 script{
                 checkout scm
                 }
-            }
-        }
-        stage {
-            steps {
-                sh 'which docker'
             }
         }
         // stage('Initialize Builder') {
