@@ -9,22 +9,26 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-        stage('Build AMD64') {
-            agent {
-                docker {
-                    image 'local/ci-tools:latest-amd64'
-                    reuseNode true
+         stage('Clonning repository') { 
+            steps { 
+                script{
+                checkout scm
                 }
             }
+        }
+        stage('Building Image') { 
+            steps { 
+                script{
+                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
+        stage('Deploying to ECR') {
             steps {
                 script{
-                    checkout scm
-
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
-                    
-                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}-amd64"
 
-                    dockerImage.push ("${env.IMAGE_TAG}-amd64")
+                    dockerImage.push ("${env.IMAGE_TAG}")
                     }
                 }
             }
