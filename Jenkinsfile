@@ -9,13 +9,6 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-        stage('Clonning repository') { 
-            steps { 
-                script{
-                checkout scm
-                }
-            }
-        }
         stage('Build AMD64') {
             agent {
                 docker {
