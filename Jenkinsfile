@@ -9,6 +9,10 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
+        stage {
+            steps {
+                sh 'docker images'
+            }
         stage('Clonning repository') { 
             steps { 
                 script{
