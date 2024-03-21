@@ -23,13 +23,10 @@ pipeline {
                     reuseNode true
                 }
             }
-            steps { 
-                script{
-                checkout scm
-                }
-            }
             steps {
                 script{
+                    checkout scm
+
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
                     
                     dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}-amd64"
