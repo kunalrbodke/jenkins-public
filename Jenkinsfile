@@ -1,18 +1,5 @@
-def do_build()
-{
-  sh '''
-  set -e
-  echo "Build software for $arch"
-  echo $WORKSPACE
-  uname -a
-  '''
-}
 pipeline {
-    agent {
-        node {
-            label 'Master'
-        }
-    }
+    agent none
     environment {
         IMAGE_REPO_NAME="sandbox-web"
         IMAGE_TAG="v01.0.7"
@@ -23,76 +10,67 @@ pipeline {
     }
     stages {
 // amd64
-        stage('Preparing and Building Setup for AMD64 arch.') {
+        stage('Running on Master Node for AMD64 arch.') {
             agent {
-                docker {
-                    image 'local/ci-tools:latest-amd64'
-                    reuseNode true
+                node {
+                    label 'Master'
                 }
             }
             steps {
                 script{
                     checkout scm
-                    env.arch = "amd64"
                 }
-                do_build()
             }
         }
-        // stage('Building AMD64 arch Image') {
-        //     steps {
-        //         script{
-        //             env.arch = "amd64"
-        //             dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
-        //         }
-        //         do_build()
-        //     }
-        // }
+        stage('Building AMD64 arch Image') {
+            steps {
+                script{
+                    dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
+                }
+            }
+        }
         stage('Deploying AMD64 arch Image to ECR') {
             steps {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    do_build().push("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
+                    dockerImage.push()
                     }
                 }
             }
         }
 // arm64
-        stage('Preparing Setup for ARM64 arch.') {
+        stage('Running on Node01 for ARM64 arch.') {
             agent {
-                docker {
-                    image 'local/ci-tools:latest-arm64'
-                    reuseNode true
+                node {
+                    label 'Node01'
                 }
             }
             steps {
                 script{
                     checkout scm
-                    env.arch = "arm64"
                 }
-                do_build()
             }
         }
-        // stage('Building ARM64 arch Image') {
-        //     steps {
-        //         script{
-        //             env.arch = "arm64"
-        //             dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
-        //         }
-        //         do_build()
-        //     }
-        // }
+        stage('Building ARM64 arch Image') {
+            steps {
+                script{
+                    dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
+                }
+            }
+        }
         stage('Deploying ARM64 arch Image to ECR') {
             steps {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    do_build().push("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
+                    dockerImage.push()
                     }
                 }
             }
         }
-        stage('Docker Manifest Layer') {
+// Docker Manifest        
+        stage('Bringing Docker Manifest') {
             steps {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
