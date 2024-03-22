@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
     environment {
         IMAGE_REPO_NAME="sandbox-web"
         IMAGE_TAG="v01.0.7"
