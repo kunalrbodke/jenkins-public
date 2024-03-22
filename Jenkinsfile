@@ -23,7 +23,7 @@ pipeline {
     }
     stages {
 // amd64
-        stage('Preparing Setup for AMD64 arch.') {
+        stage('Preparing and Building Setup for AMD64 arch.') {
             agent {
                 docker {
                     image 'local/ci-tools:latest-amd64'
@@ -33,18 +33,20 @@ pipeline {
             steps {
                 script{
                     checkout scm
-                }
-            }
-        }
-        stage('Building AMD64 arch Image') {
-            steps {
-                script{
                     env.arch = "amd64"
-                    // dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
                 }
                 do_build()
             }
         }
+        // stage('Building AMD64 arch Image') {
+        //     steps {
+        //         script{
+        //             env.arch = "amd64"
+        //             dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
+        //         }
+        //         do_build()
+        //     }
+        // }
         stage('Deploying AMD64 arch Image to ECR') {
             steps {
                 script {
@@ -66,18 +68,20 @@ pipeline {
             steps {
                 script{
                     checkout scm
-                }
-            }
-        }
-        stage('Building ARM64 arch Image') {
-            steps {
-                script{
                     env.arch = "arm64"
-                    // dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
                 }
                 do_build()
             }
         }
+        // stage('Building ARM64 arch Image') {
+        //     steps {
+        //         script{
+        //             env.arch = "arm64"
+        //             dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
+        //         }
+        //         do_build()
+        //     }
+        // }
         stage('Deploying ARM64 arch Image to ECR') {
             steps {
                 script {
