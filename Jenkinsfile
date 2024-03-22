@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        IMAGE_TAG="v01.0.8"
+        IMAGE_TAG="v01.0.9"
         REPOSITORY_URI="922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web"
     }
 
@@ -65,26 +65,26 @@ pipeline {
             }
         }
 
-// Clean Docker Images
-        stage('Cleaning Docker Images in Controller') {
-            agent {
-                node {
-                    label 'Master'
-                }
-            }
-            steps {
-                sh 'docker rmi -f $(docker images -a -q)'
-            }
-        }
-        stage('Cleaning Docker Images in Agent') {
-            agent {
-                node {
-                    label 'Node01'
-                }
-            }
-            steps {
-                sh 'docker rmi -f $(docker images -a -q)'
-            }
-        }
+// // Clean Docker Images
+//         stage('Cleaning Docker Images in Controller') {
+//             agent {
+//                 node {
+//                     label 'Master'
+//                 }
+//             }
+//             steps {
+//                 sh 'docker rmi -f $(docker images -a -q)'
+//             }
+//         }
+//         stage('Cleaning Docker Images in Agent') {
+//             agent {
+//                 node {
+//                     label 'Node01'
+//                 }
+//             }
+//             steps {
+//                 sh 'docker rmi -f $(docker images -a -q)'
+//             }
+//         }
     }
 }
