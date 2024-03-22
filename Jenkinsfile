@@ -52,7 +52,7 @@ pipeline {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    push("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
+                    do_build().push("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
                     }
                 }
             }
@@ -87,7 +87,7 @@ pipeline {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    push("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
+                    do_build().push("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
                     }
                 }
             }
