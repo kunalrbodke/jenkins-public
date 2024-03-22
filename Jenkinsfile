@@ -40,5 +40,36 @@ pipeline {
                 }
             }
         }
+        // arm64
+        stage('Preparing Setup for ARM64 arch.') {
+            agent {
+                docker {
+                    image 'local/ci-tools:latest-arm64'
+                    reuseNode true
+                }
+            }
+            steps {
+                script{
+                    checkout scm
+                }
+            }
+        }
+        stage('Building ARM64 arch Image') {
+            steps {
+                script{
+                    dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
+                }
+            }
+        }
+        stage('Deploying ARM64 arch Image to ECR') {
+            steps {
+                script {
+                    docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
+
+                    dockerImage.push()
+                    }
+                }
+            }
+        }
     }
 }
