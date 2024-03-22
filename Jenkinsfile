@@ -1,3 +1,12 @@
+def do_build()
+{
+  sh '''
+  set -e
+  echo "Build software for $arch"
+  echo $WORKSPACE
+  uname -a
+  '''
+}
 pipeline {
     agent none
     environment {
@@ -9,7 +18,7 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-        // amd64
+// amd64
         stage('Preparing Setup for AMD64 arch.') {
             agent {
                 docker {
@@ -26,8 +35,10 @@ pipeline {
         stage('Building AMD64 arch Image') {
             steps {
                 script{
-                    dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
+                    env.arch = "amd64"
+                    // dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
                 }
+                do_build()
             }
         }
         stage('Deploying AMD64 arch Image to ECR') {
@@ -35,12 +46,12 @@ pipeline {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    dockerImage.push()
+                    dockerImage.push("${REPOSITORY_URI}:${IMAGE_TAG}-amd64")
                     }
                 }
             }
         }
-        // arm64
+// arm64
         stage('Preparing Setup for ARM64 arch.') {
             agent {
                 docker {
@@ -57,8 +68,10 @@ pipeline {
         stage('Building ARM64 arch Image') {
             steps {
                 script{
-                    dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
+                    env.arch = "arm64"
+                    // dockerImage = docker.build("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
                 }
+                do_build()
             }
         }
         stage('Deploying ARM64 arch Image to ECR') {
@@ -66,7 +79,7 @@ pipeline {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
-                    dockerImage.push()
+                    dockerImage.push("${REPOSITORY_URI}:${IMAGE_TAG}-arm64")
                     }
                 }
             }
