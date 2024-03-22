@@ -8,7 +8,11 @@ def do_build()
   '''
 }
 pipeline {
-    agent none
+    agent {
+        node {
+            label 'Master'
+        }
+    }
     environment {
         IMAGE_REPO_NAME="sandbox-web"
         IMAGE_TAG="v01.0.7"
@@ -85,7 +89,6 @@ pipeline {
             }
         }
         stage('Docker Manifest Layer') {
-            agent any
             steps {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
