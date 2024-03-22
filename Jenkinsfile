@@ -8,7 +8,7 @@ pipeline {
     options {
         skipStagesAfterUnstable()
     }
-    
+
     stages {
 // amd64
         stage('Building & Pushing AMD64-arch Image') {
@@ -27,7 +27,6 @@ pipeline {
 
                     dockerImage.push()
 
-                    sh 'docker rmi -f $(docker images -a -q)'
                     }
                 }
             }
@@ -49,8 +48,6 @@ pipeline {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
                     dockerImage.push()
-
-                    sh 'docker rmi -f $(docker images -a -q)'
                     }
                 }
             }
@@ -65,6 +62,28 @@ pipeline {
                         sh 'docker manifest push ${REPOSITORY_URI}'
                     }
                 }
+            }
+        }
+
+// Clean Docker Images
+        stage('Cleaning Docker Images in Controller') {
+            agent {
+                node {
+                    label 'Master'
+                }
+            }
+            steps {
+                sh 'docker rmi -f $(docker images -a -q)'
+            }
+        }
+        stage('Cleaning Docker Images in Agent') {
+            agent {
+                node {
+                    label 'Node01'
+                }
+            }
+            steps {
+                sh 'docker rmi -f $(docker images -a -q)'
             }
         }
     }
