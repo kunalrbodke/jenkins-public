@@ -74,8 +74,11 @@ pipeline {
         stage('Docker Manifest Layer') {
             agent any
             steps {
-                sh 'docker manifest create ${REPOSITORY_URI} ${REPOSITORY_URI}:${IMAGE_TAG}-amd64 ${REPOSITORY_URI}:${IMAGE_TAG}-arm64'
-                sh 'docker manifest push ${REPOSITORY_URI}'
+                script {
+                    docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
+                        sh 'docker manifest create ${REPOSITORY_URI} ${REPOSITORY_URI}:${IMAGE_TAG}-amd64 ${REPOSITORY_URI}:${IMAGE_TAG}-arm64'
+                        sh 'docker manifest push ${REPOSITORY_URI}'
+                    }
             }
         }
     }
