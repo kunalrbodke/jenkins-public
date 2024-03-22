@@ -1,13 +1,14 @@
 pipeline {
     agent none
     environment {
-        IMAGE_REPO_NAME="sandbox-web"
-        IMAGE_TAG="v01.0.7"
+        IMAGE_TAG="v01.0.8"
         REPOSITORY_URI="922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web"
     }
+
     options {
         skipStagesAfterUnstable()
     }
+    
     stages {
 // amd64
         stage('Building & Pushing AMD64-arch Image') {
@@ -25,6 +26,8 @@ pipeline {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
                     dockerImage.push()
+
+                    sh 'docker rmi -f $(docker images -a -q)'
                     }
                 }
             }
@@ -46,6 +49,8 @@ pipeline {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
 
                     dockerImage.push()
+
+                    sh 'docker rmi -f $(docker images -a -q)'
                     }
                 }
             }
