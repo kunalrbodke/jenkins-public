@@ -72,9 +72,10 @@ pipeline {
             }
         }
         stage('Docker Manifest Layer') {
+            agent any
             steps {
                 sh 'docker manifest create ${REPOSITORY_URI} ${REPOSITORY_URI}:${IMAGE_TAG}-amd64 ${REPOSITORY_URI}:${IMAGE_TAG}-arm64'
-                sh 'docker manifest create ${REPOSITORY_URI}'
+                sh 'docker manifest push ${REPOSITORY_URI}'
             }
         }
     }
