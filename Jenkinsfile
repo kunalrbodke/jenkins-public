@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        IMAGE_TAG="v1.0.4"
+        IMAGE_TAG="v01.0.5"
         REPOSITORY_URI="922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web"
     }
 
@@ -73,7 +73,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker rmi -f ${IMAGE_TAG}-amd64'
+                sh 'docker rmi -f ${REPOSITORY_URI}:${IMAGE_TAG}-amd64'
             }
         }
         stage('Cleaning Docker Images in Agent') {
@@ -83,7 +83,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker rmi -f {IMAGE_TAG}-arm64'
+                sh 'docker rmi -f ${REPOSITORY_URI}:${IMAGE_TAG}-arm64'
             }
         }
     }
