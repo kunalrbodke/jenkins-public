@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        IMAGE_TAG="v01.0.9"
+        IMAGE_TAG="v1.0.4"
         REPOSITORY_URI="922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web"
     }
 
@@ -58,33 +58,33 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web', 'ecr:ap-south-1:aws-ecr-access') {
-                        sh 'docker manifest create ${REPOSITORY_URI} ${REPOSITORY_URI}:${IMAGE_TAG}-amd64 ${REPOSITORY_URI}:${IMAGE_TAG}-arm64'
-                        sh 'docker manifest push ${REPOSITORY_URI}'
+                        sh 'docker manifest create ${REPOSITORY_URI}:${IMAGE_TAG} ${REPOSITORY_URI}:${IMAGE_TAG}-amd64 ${REPOSITORY_URI}:${IMAGE_TAG}-arm64'
+                        sh 'docker manifest push ${REPOSITORY_URI}:${IMAGE_TAG}'
                     }
                 }
             }
         }
 
-// // Clean Docker Images
-//         stage('Cleaning Docker Images in Controller') {
-//             agent {
-//                 node {
-//                     label 'Master'
-//                 }
-//             }
-//             steps {
-//                 sh 'docker rmi -f $(docker images -a -q)'
-//             }
-//         }
-//         stage('Cleaning Docker Images in Agent') {
-//             agent {
-//                 node {
-//                     label 'Node01'
-//                 }
-//             }
-//             steps {
-//                 sh 'docker rmi -f $(docker images -a -q)'
-//             }
-//         }
+// Clean Docker Images
+        stage('Cleaning Docker Images in Controller') {
+            agent {
+                node {
+                    label 'Master'
+                }
+            }
+            steps {
+                sh 'docker rmi -f ${IMAGE_TAG}-amd64'
+            }
+        }
+        stage('Cleaning Docker Images in Agent') {
+            agent {
+                node {
+                    label 'Node01'
+                }
+            }
+            steps {
+                sh 'docker rmi -f {IMAGE_TAG}-arm64'
+            }
+        }
     }
 }
