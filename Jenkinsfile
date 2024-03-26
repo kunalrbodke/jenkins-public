@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        IMAGE_TAG="v01.0.5"
+        IMAGE_TAG="v01.0.6"
         REPOSITORY_URI="922710632928.dkr.ecr.ap-south-1.amazonaws.com/sandbox-web"
     }
 
