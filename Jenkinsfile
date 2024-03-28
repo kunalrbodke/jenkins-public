@@ -18,8 +18,6 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker --version'
-                sh 'docker buildx version'
                 script{
                     checkout scm
                     
